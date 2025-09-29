@@ -5,11 +5,13 @@ export default function ShortenForm() {
   const [url, setUrl] = useState("");
   const [shortUrl, setShortUrl] = useState("");
   const [error, setError] = useState("");
+  const [copied, setCopied] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setShortUrl("");
+    setCopied(false);
 
     try {
       const res = await axios.post("http://localhost:5000/api/shorten", {
@@ -22,8 +24,16 @@ export default function ShortenForm() {
     }
   };
 
+  const handleCopy = () => {
+    if (shortUrl) {
+      navigator.clipboard.writeText(shortUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000); // reset message after 2s
+    }
+  };
+
   return (
-    <div className="w-full max-w-md bg-white shadow-lg rounded-xl p-6  w-full max-w-lg md:min-w-[600px]">
+    <div className="w-full max-w-md bg-white shadow-lg rounded-xl p-6 w-full max-w-lg md:min-w-[600px]">
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
           type="url"
@@ -44,16 +54,26 @@ export default function ShortenForm() {
       {shortUrl && (
         <div className="mt-4 text-center">
           <p className="text-gray-600">Your shortened link:</p>
-          <a
-            href={shortUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-indigo-600 font-semibold hover:underline"
-          >
-            {shortUrl}
-          </a>
+          <div className="flex items-center justify-center gap-2">
+            <a
+              href={shortUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-indigo-600 font-semibold hover:underline break-all"
+            >
+              {shortUrl}
+            </a>
+            <button
+              onClick={handleCopy}
+              className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1 rounded-lg text-sm"
+            >
+              {copied ? "Copied!" : "Copy"}
+            </button>
+          </div>
         </div>
       )}
+
+      {error && <p className="text-red-500 mt-2">{error}</p>}
     </div>
   );
 }
