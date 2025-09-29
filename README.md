@@ -15,7 +15,3 @@ It allows you to shorten long URLs into easy-to-share links.
 
 ## Getting Started
 
-### Clone the repository
-```bash
-git clone https://github.com/your-username/your-repo-name.git
-cd your-repo-name
