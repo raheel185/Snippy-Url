@@ -10,8 +10,5 @@ It allows you to shorten long URLs into easy-to-share links.
 - Fast and lightweight  
 
 ## Tech Stack
-- HTML, CSS, JavaScript (Vanilla JS)  
-- Node.js (optional, if you add backend later)  
-
-## Getting Started
-
+- React.js, Tailwind CSS
+- Node.js, Express, MongoDB, NanoID 
