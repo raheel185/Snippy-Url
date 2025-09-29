@@ -1,17 +1,24 @@
 import { useState } from "react";
+import axios from "axios";
 
 export default function ShortenForm() {
   const [url, setUrl] = useState("");
   const [shortUrl, setShortUrl] = useState("");
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setShortUrl("");
 
-    // For now, we’ll just simulate a short link until backend is ready
-    if (url.trim() !== "") {
-      const fakeCode = Math.random().toString(36).substring(2, 8);
-      setShortUrl(`${window.location.origin}/${fakeCode}`);
-      setUrl("");
+    try {
+      const res = await axios.post("http://localhost:5000/api/shorten", {
+        longUrl: url,
+      });
+      setShortUrl(res.data.shortUrl);
+    } catch (err) {
+      console.error(err);
+      setError("Failed to shorten URL. Try again.");
     }
   };
 
