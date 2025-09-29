@@ -31,3 +31,21 @@ export const redirectUrl = async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 };
+
+export const urlStats = async (req, res) => {
+  try {
+    const shortId = req.params.shortId;
+    const url = await Url.findOne({ shortUrl: shortId });
+
+    if (!url)
+      return res.status(404).json({ message: "URL not found", Ido: shortId });
+
+    res.json({
+      longUrl: url.longUrl,
+      shortUrl: url.shortUrl,
+      clicks: url.clicks,
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+};

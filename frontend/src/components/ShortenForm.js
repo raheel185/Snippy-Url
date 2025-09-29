@@ -4,6 +4,7 @@ import axios from "axios";
 export default function ShortenForm() {
   const [url, setUrl] = useState("");
   const [shortUrl, setShortUrl] = useState("");
+  const [clicks, setClicks] = useState(null);
   const [error, setError] = useState("");
   const [copied, setCopied] = useState(false);
 
@@ -12,12 +13,20 @@ export default function ShortenForm() {
     setError("");
     setShortUrl("");
     setCopied(false);
+    setClicks(null);
 
     try {
       const res = await axios.post("http://localhost:5000/api/shorten", {
         longUrl: url,
       });
       setShortUrl(res.data.shortUrl);
+
+      // fetch stats
+      const shortId = res.data.shortUrl.split("/").pop();
+      const stats = await axios.get(
+        `http://localhost:5000/api/stats/${shortId}`
+      );
+      setClicks(stats.data.clicks);
     } catch (err) {
       console.error(err);
       setError("Failed to shorten URL. Try again.");
@@ -33,7 +42,7 @@ export default function ShortenForm() {
   };
 
   return (
-    <div className="w-full max-w-md bg-white shadow-lg rounded-xl p-6 w-full max-w-lg md:min-w-[600px]">
+    <div className="w-full max-w-md bg-white shadow-lg rounded-xl p-6 md:min-w-[600px]">
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
           type="url"
@@ -52,7 +61,7 @@ export default function ShortenForm() {
       </form>
 
       {shortUrl && (
-        <div className="mt-4 text-center">
+        <div className="mt-4 text-center space-y-2">
           <p className="text-gray-600">Your shortened link:</p>
           <div className="flex items-center justify-center gap-2">
             <a
@@ -70,6 +79,11 @@ export default function ShortenForm() {
               {copied ? "Copied!" : "Copy"}
             </button>
           </div>
+          {clicks !== null && (
+            <p className="text-gray-700 font-medium">
+              🔗 Total Clicks: {clicks}
+            </p>
+          )}
         </div>
       )}
 
