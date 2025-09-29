@@ -1,4 +1,4 @@
-# URL Shortener
+# Snippy URL
 
 A simple and efficient URL Shortener built with JavaScript.  
 It allows you to shorten long URLs into easy-to-share links.

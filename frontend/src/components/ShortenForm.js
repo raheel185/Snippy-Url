@@ -23,7 +23,7 @@ export default function ShortenForm() {
   };
 
   return (
-    <div className="w-full max-w-md bg-white shadow-lg rounded-xl p-6">
+    <div className="w-full max-w-md bg-white shadow-lg rounded-xl p-6  w-full max-w-lg md:min-w-[600px]">
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
           type="url"
